@@ -50,13 +50,41 @@ const router = createBrowserRouter([
               },
             ]
           },
-          //TODO: add review / order more items
           {
             path: ":orderID",
             children: [
               {
-
+                index: true,
+                element: <OrderFinishedPage />
+              },
+              {
+                path: 'review',
+                element: <PostReviewPage />
+              },
+              {
+                path: 'order-more',
+                children: [
+                  {
+                    index: true,
+                    element: <OrderMoreMealsPage />
+                  },
+                  {
+                    path: 'meals',
+                    children: [
+                      {
+                        index: true,
+                        element: <MealMenuPage />
+                      },
+                      {
+                        path: ':mealID',
+                        element: <MealDetailPage />
+                      }
+                    ]
+                  }
+                
+                ]
               }
+
             ]
           }
         ]
