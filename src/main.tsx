@@ -5,7 +5,8 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import App from './App'
-
+import { ErrorPage } from './features/ErrorPage'
+import { HomePage } from './features/home/HomePage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
         index: true,
         element: <HomePage />
       },
-      {
+      /*{
         path: 'login',
         element: <LoginPage />
       },
@@ -162,7 +163,7 @@ const router = createBrowserRouter([
             element: <ChangePasswordPage />
           }
         ]
-      }
+      }*/
     ]
 
   }
