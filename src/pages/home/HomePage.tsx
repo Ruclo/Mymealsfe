@@ -10,17 +10,20 @@ export function HomePage() {
             <NavigationMenu>
             <NavigationMenuList>
                 <NavigationMenuItem>
+                <NavigationMenuLink asChild>
                     <Link to='/order'>
-                        <NavigationMenuLink>
+                        
                             Create an order
-                        </NavigationMenuLink>
+                       
                     </Link>
-
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
                     <Link to='/login'>
-                        <NavigationMenuLink>
+                        
                             Log in
-                        </NavigationMenuLink>
+                        
                     </Link>
+                    </NavigationMenuLink>
                 </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>

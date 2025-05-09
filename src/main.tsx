@@ -5,8 +5,25 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import App from './App'
-import { ErrorPage } from './features/ErrorPage'
-import { HomePage } from './features/home/HomePage'
+import { ErrorPage } from './pages/ErrorPage'
+import { HomePage } from './pages/home/HomePage'
+import { LoginPage } from './pages/auth/LoginPage'
+import { AdminPage } from './pages/home/AdminPage'
+import { StaffPage } from './pages/home/StaffPage'
+import { ChangePasswordPage } from './pages/auth/ChangePasswordPage'
+import { mealByIdLoader, mealsLoader } from './api/meals'
+import { MealMenuPage } from './pages/meals/MealMenuPage'
+import { MealDetailPage } from './pages/meals/MealDetailPage'
+import { OrderContextRoute } from './context/OrderContext'
+import { CreateOrderPage } from './pages/orders/CreateOrderPage'
+import { OrderFinishedPage } from './pages/orders/OrderFinishedPage'
+import { PostReviewPage } from './pages/orders/PostReviewPage'
+import { OrderMoreMealsPage } from './pages/orders/OrderMoreMealsPage'
+import { staffLoader } from './api/users'
+import { ManageEmployeesPage } from './pages/employees/ManageEmployeesPage'
+import { CreateEmployeePage } from './pages/employees/CreateEmployeePage'
+import { ManageMealsPage } from './pages/meals/ManageMealsPage'
+import { CreateMealPage } from './pages/meals/CreateMealPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,31 +43,36 @@ const router = createBrowserRouter([
         index: true,
         element: <HomePage />
       },
-      /*{
+      {
         path: 'login',
         element: <LoginPage />
       },
+      
       {
         path: 'order',
-        element: <OrderContextProvider />,
+        element: <OrderContextRoute />,
         children: [
           {
             index: true,
-            element: <CreateOrderPage />
+            element: <CreateOrderPage />,
+            loader: mealsLoader(queryClient)
           },
           {
             path: 'meals',
             children: [
               {
                 index: true,
-                element: <MealMenuPage />
+                element: <MealMenuPage />,
+                loader: mealsLoader(queryClient)
               },
               {
                 path: ':mealID',
-                element: <MealDetailPage />
+                element: <MealDetailPage />,
+                loader: mealByIdLoader(queryClient)
               },
             ]
           },
+          
           {
             path: ":orderID",
             children: [
@@ -62,30 +84,33 @@ const router = createBrowserRouter([
                 path: 'review',
                 element: <PostReviewPage />
               },
+              
               {
                 path: 'order-more',
                 children: [
                   {
                     index: true,
-                    element: <OrderMoreMealsPage />
+                    element: <OrderMoreMealsPage />,
+                    loader: mealsLoader(queryClient)
                   },
                   {
                     path: 'meals',
                     children: [
                       {
                         index: true,
-                        element: <MealMenuPage />
+                        element: <MealMenuPage />,
+                        loader: mealsLoader(queryClient)
                       },
                       {
                         path: ':mealID',
-                        element: <MealDetailPage />
+                        element: <MealDetailPage />,
+                        loader: mealByIdLoader(queryClient)
                       }
                     ]
                   }
                 
                 ]
               }
-
             ]
           }
         ]
@@ -98,11 +123,16 @@ const router = createBrowserRouter([
             element: <AdminPage />
           },
           {
+            path: "change-password",
+            element: <ChangePasswordPage />
+          },
+          {
             path: 'employees',
             children: [
               {
                 index: true,
-                element: <ManageEmployeesPage />
+                element: <ManageEmployeesPage />,
+                loader: staffLoader(queryClient)
               },
               {
                 path: 'create',
@@ -115,15 +145,18 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <ManageMealsPage />
+                element: <ManageMealsPage />,
+                loader: mealsLoader(queryClient)
               },
               {
                 path: 'create',
                 element: <CreateMealPage />
-              },
+              }]},
+              /*
               {
                 path: ':mealID/edit',
-                element: <EditMealPage />
+                element: <EditMealPage />,
+                loader: mealByIdLoader(queryClient)
               }
             ]
             
@@ -141,12 +174,10 @@ const router = createBrowserRouter([
               }
             ]
           },
-          {
-            path: "change-password",
-            element: <ChangePasswordPage />
-          }
+        */
         ]
       },
+      
       {
         path: 'staff',
         children: [
@@ -155,19 +186,22 @@ const router = createBrowserRouter([
             element: <StaffPage />
           },
           {
-            path: "orders/pending",
-            element: <PendingOrdersPage />
-          },
-          {
             path: "change-password",
             element: <ChangePasswordPage />
           }
         ]
-      }*/
-    ]
-
-  }
-])
+      }
+      /*
+          {
+            path: "orders/pending",
+            element: <PendingOrdersPage />
+          },
+          
+        ]
+  */]
+    }
+  ]
+)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
