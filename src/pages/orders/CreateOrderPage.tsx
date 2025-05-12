@@ -13,6 +13,7 @@ import { useEffect, useMemo } from "react";
 import { createOrder } from "@/api/orders";
 import type { Order } from "@/types/order";
 import { Plus } from "lucide-react";
+import { getTotalPrice } from "@/utils/orderutils";
 
 export function CreateOrderPage() {
     const navigate = useNavigate()
@@ -29,15 +30,7 @@ export function CreateOrderPage() {
     const items = form.getValues('items')
 
     // Total price
-    const price = useMemo(() => items.reduce((total, item) => {
-        const itemPrice = meals.find(meal => meal.id === item.meal_id)?.price
-        if (itemPrice == undefined) {
-            throw new Error("Undefined price")
-        }
-
-        return total += item.quantity * itemPrice
-        }, 0), [items, meals])
-
+    const price = useMemo(() => getTotalPrice(items, meals), [items, meals])
 
     // Save current order to context when leaving this page
     useEffect(() => {

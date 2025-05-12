@@ -25,6 +25,7 @@ export const createMealSchema = baseMealSchema.extend({
 export type CreateMealData = z.infer<typeof createMealSchema>
 
 export const updateMealSchema = baseMealSchema.extend({
+    id: z.number(),
     photo: z
         .instanceof(File)
         .refine(file => file.size < 5_000_000, "File must be less than 5MB")

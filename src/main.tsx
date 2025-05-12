@@ -24,6 +24,10 @@ import { ManageEmployeesPage } from './pages/employees/ManageEmployeesPage'
 import { CreateEmployeePage } from './pages/employees/CreateEmployeePage'
 import { ManageMealsPage } from './pages/meals/ManageMealsPage'
 import { CreateMealPage } from './pages/meals/CreateMealPage'
+import { EditMealPage } from './pages/meals/EditMealPage'
+import { OrdersPage } from './pages/orders/OrdersPage'
+import { ordersLoader } from './api/orders'
+import { PendingOrdersPage } from './pages/orders/PendingOrdersPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -151,8 +155,8 @@ const router = createBrowserRouter([
               {
                 path: 'create',
                 element: <CreateMealPage />
-              }]},
-              /*
+              },
+              
               {
                 path: ':mealID/edit',
                 element: <EditMealPage />,
@@ -166,7 +170,8 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <OrdersPage />
+                element: <OrdersPage />,
+                loader: ordersLoader(queryClient)
               },
               {
                 path: "pending",
@@ -174,7 +179,6 @@ const router = createBrowserRouter([
               }
             ]
           },
-        */
         ]
       },
       
@@ -188,20 +192,18 @@ const router = createBrowserRouter([
           {
             path: "change-password",
             element: <ChangePasswordPage />
-          }
-        ]
-      }
-      /*
+          },
           {
             path: "orders/pending",
             element: <PendingOrdersPage />
           },
           
         ]
-  */]
     }
-  ]
-)
+    ]
+  }
+])
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

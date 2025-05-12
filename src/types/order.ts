@@ -15,9 +15,8 @@ export type CurrentOrder = {
 
 export type OrderItem = {
     meal_id: number,
-    meal_name: string,
     quantity: number,
-    Completed: number,
+    completed: number,
 }
 
 export type Review = {

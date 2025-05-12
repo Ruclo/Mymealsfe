@@ -6,16 +6,17 @@ export function ManageMealsPage() {
     const {data} = useMealQuery()
 
     return (
-        <div>
-            <div className="flex items-center">
-                <h2>
+        <div className="w-screen h-100">
+            <header className="py-5 text-center font-bold text-xl flex justify-center items-center">
+                <div>
                     Manage meals
-                </h2>
-                <Link to="create">
-                    <PlusCircle />  
+                </div>
+                <Link to="create" className="ml-2">
+                    <PlusCircle />
                 </Link>
-            </div> 
-            {data != null && <MealList meals={data} linkMutation={(id:number) => `edit/${id}`}/>}
+            </header>
+            <div className="flex flex-col items-center justify-center">
+                {data != null && <MealList meals={data} linkMutation={(id:number) => `${id}/edit`}/>}
+            </div>
         </div>
-    )
-}
+)}
