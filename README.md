@@ -1,4 +1,5 @@
 # MyMeals Frontend
+Repo: `https://github.com/Ruclo/Mymealsfe`
 React + Vite frontend for the MyMeals restaurant dashboard.
 
 **Overview**
@@ -30,5 +31,5 @@ docker compose up --build
 3. Add a hosts entry for `chat.local` or update `Mymealsfe/Caddyfile` to use `localhost`.
 
 **Related**
-- Root project: `../README.md`
-- Backend: `../MyMeals/README.md`
+- Root project: `https://github.com/Ruclo/mymealsdashboard`
+- Backend: `https://github.com/Ruclo/MyMeals`
