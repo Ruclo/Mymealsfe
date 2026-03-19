@@ -18,7 +18,7 @@ export const createMealSchema = baseMealSchema.extend({
     photo: z
         .instanceof(File)
         .refine(file => file.size < 5_000_000, "File must be less than 5MB")
-        .refine(file => file.type.startsWith("image/"), "File must be an image"),
+        .refine(file => file.type === "" || file.type.startsWith("image/"), "File must be an image"),
     
 })
 
@@ -29,7 +29,7 @@ export const updateMealSchema = baseMealSchema.extend({
     photo: z
         .instanceof(File)
         .refine(file => file.size < 5_000_000, "File must be less than 5MB")
-        .refine(file => file.type.startsWith("image/"), "File must be an image")
+        .refine(file => file.type === "" || file.type.startsWith("image/"), "File must be an image")
         .optional(),
 })
 

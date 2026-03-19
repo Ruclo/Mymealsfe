@@ -10,10 +10,13 @@ import { Button } from "@/components/ui/button"
 import { ImageUpload } from "@/components/ImageUpload"
 import { useAddMeal } from "@/api/meals"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { ApiError } from "@/api/client"
 
 export function CreateMealPage() {
     const addMeal = useAddMeal()
     const navigate = useNavigate()
+    const [requestError, setRequestError] = useState<string | null>(null)
 
     const form = useForm<CreateMealData>({
         resolver: zodResolver(createMealSchema),
@@ -26,8 +29,24 @@ export function CreateMealPage() {
     })
 
     const onSubmit = async (data: CreateMealData) => {
-        await addMeal.mutateAsync(data)
-        navigate(-1)
+        setRequestError(null)
+
+        try {
+            await addMeal.mutateAsync(data)
+            navigate(-1)
+        } catch (err) {
+            if (err instanceof ApiError) {
+                setRequestError(err.message)
+                return
+            }
+
+            if (err instanceof Error) {
+                setRequestError(err.message)
+                return
+            }
+
+            setRequestError("Failed to create meal. Please try again.")
+        }
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +75,7 @@ export function CreateMealPage() {
                     <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                        <Input placeholder="Meal name" {...field} />
+                        <Input placeholder="Meal name" {...field} disabled={addMeal.isPending} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -69,7 +88,7 @@ export function CreateMealPage() {
                     <FormItem>
                         <FormLabel>Category</FormLabel>
                         <FormControl>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value} disabled={addMeal.isPending}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select a meal category" />
                         </SelectTrigger>
@@ -96,7 +115,7 @@ export function CreateMealPage() {
                         <FormItem>
                             <FormLabel>Image</FormLabel>
                             <FormControl>
-                                <ImageUpload onChange={handleChange}/>          
+                                <ImageUpload onChange={handleChange} disabled={addMeal.isPending}/>          
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -112,7 +131,7 @@ export function CreateMealPage() {
                     <FormItem>
                         <FormLabel>Description</FormLabel>
                         <FormControl>
-                        <Textarea placeholder="Meal description" {...field} />
+                        <Textarea placeholder="Meal description" {...field} disabled={addMeal.isPending} />
                         </FormControl>
                         
                         <FormMessage />
@@ -128,15 +147,20 @@ export function CreateMealPage() {
                     <FormItem>
                         <FormLabel>Price</FormLabel>
                         <FormControl>
-                        <Input placeholder="Price" {...field} />
+                        <Input placeholder="Price" {...field} disabled={addMeal.isPending} />
                         </FormControl>
             
                         <FormMessage />
                     </FormItem>
                     )}
                 />
+                {requestError && (
+                    <div className="text-sm text-red-500">{requestError}</div>
+                )}
                 <div className="flex justify-end">       
-                    <Button type="submit">Create meal</Button>
+                    <Button type="submit" disabled={addMeal.isPending}>
+                        {addMeal.isPending ? "Creating meal..." : "Create meal"}
+                    </Button>
                 </div>  
                 </form>
             </Form>

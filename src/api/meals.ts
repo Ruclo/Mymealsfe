@@ -7,10 +7,26 @@ async function fetchMeals(): Promise<Meal[]> {
     return await apiRequest<Meal[]>('/api/meals')
 }
 
+async function fetchMealsWithDeleted(): Promise<Meal[]> {
+    return await apiRequest<Meal[]>('/api/meals/deleted')
+}
+
 const mealQueryOptions = queryOptions({
     queryKey: ['meals'],
     queryFn: () => fetchMeals()
 })
+
+const mealsWithDeletedQueryOptions = queryOptions({
+    queryKey: ['meals', 'withDeleted'],
+    queryFn: () => fetchMealsWithDeleted()
+})
+
+const invalidateMealQueries = async (queryClient: ReturnType<typeof useQueryClient>) => {
+    await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['meals'], exact: true }),
+        queryClient.invalidateQueries({ queryKey: ['meals', 'withDeleted'], exact: true }),
+    ])
+}
 
 const createMeal = async (meal: CreateMealData) => {
     const formData = new FormData()
@@ -57,7 +73,7 @@ export function useUpdateMeal() {
   
     return useMutation({
       mutationFn: updateMeal,
-      onSuccess: () => queryClient.invalidateQueries({queryKey: ['meals']})
+      onSuccess: async () => invalidateMealQueries(queryClient)
     })
 }
 
@@ -66,7 +82,7 @@ export function useDeleteMeal() {
 
     return useMutation({
         mutationFn: deleteMeal,
-        onSuccess: (id) => {
+        onSuccess: async (id) => {
             queryClient.setQueryData(['meals'], (old: Meal[] = []) => {
                 const index = old.findIndex(m => m.id === id)
                 if (index === -1) return old
@@ -74,8 +90,10 @@ export function useDeleteMeal() {
                 newMeals.splice(index, 1)
                 return newMeals
             });
+            await invalidateMealQueries(queryClient)
         }
     })
 }
 
 export const useMealQuery = () => useQuery(mealQueryOptions)
+export const useMealQueryWithDeleted = () => useQuery(mealsWithDeletedQueryOptions)

@@ -1,5 +1,4 @@
-{$CADDY_HOST:chat.local} {
-	tls internal
+{$CADDY_HOST:mymeals.local} {
 	root * /srv
 	encode gzip
 
@@ -11,4 +10,8 @@
 		try_files {path} /index.html
 		file_server
 	}
+}
+
+http://{$CADDY_HOST:mymeals.local} {
+	redir https://{$CADDY_HOST:mymeals.local}{uri}
 }

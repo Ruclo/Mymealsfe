@@ -4,11 +4,13 @@ import React, { useRef, useState } from "react";
 interface ImageUploadProps {
     initialImage?: string; 
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    disabled?: boolean
 }
 
 export function ImageUpload({
     initialImage,
-    onChange
+    onChange,
+    disabled = false,
 }: ImageUploadProps) {
     const [imagePreview, setImagePreview] = useState<string | null>(initialImage || null);
 
@@ -30,7 +32,11 @@ export function ImageUpload({
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }}
-                onClick={() => inputRef.current?.click()}
+                onClick={() => {
+                    if (!disabled) {
+                        inputRef.current?.click()
+                    }
+                }}
             >
                 {!imagePreview && (
                     <span className="text-gray-500 group-hover:text-gray-700">
@@ -43,6 +49,7 @@ export function ImageUpload({
                     className="hidden"
                     onChange={handleChange}
                     ref={inputRef}
+                    disabled={disabled}
                 />
             </div>
         </div>
