@@ -1,46 +1,19 @@
 import { User } from "@/types/user"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { type QueryClient } from "@tanstack/react-query"
 import type { LoginData } from "@/schemas/auth"
+import { apiRequest } from "@/api/client"
 
 async function fetchStaff(): Promise<User[]> {
-    const res = await fetch('/api/users/staff', {
-        credentials: 'include'
-    })
-
-    if (!res.ok) {
-        throw new Error('Failed to fetch meals')
-    }
-    return await res.json()
+    return await apiRequest<User[]>('/api/users/staff')
 }
 
 async function deleteStaff(username: string): Promise<string> {
-    const res = await fetch(`/api/users/${username}`,
-        {
-            credentials: "include",
-            method: "DELETE"
-        }
-    )
-
-    if (!res.ok) {
-        throw new Error(JSON.stringify(await res.json()))
-    }
+    await apiRequest<void>(`/api/users/${username}`, { method: "DELETE" })
     return username
 }
 
 async function addStaff(data: LoginData): Promise<User> {
-    const res = await fetch(`/api/users/`,
-        {
-            credentials: "include",
-            method: "POST",
-            body: JSON.stringify(data)
-        }
-    )
-
-    if (!res.ok) {
-        throw new Error(JSON.stringify(await res.json()))
-    }
-    return await res.json()
+    return await apiRequest<User>('/api/users', { method: "POST", json: data })
 }
 
 export const useDeleteStaff = () => {
@@ -72,8 +45,5 @@ const staffQueryOptions = queryOptions({
     queryKey: ['staff'],
     queryFn: () => fetchStaff()
 })
-
-export const staffLoader = (queryClient: QueryClient) => 
-    async () => await queryClient.ensureQueryData(staffQueryOptions)
 
 export const useStaffQuery = () => useQuery(staffQueryOptions)

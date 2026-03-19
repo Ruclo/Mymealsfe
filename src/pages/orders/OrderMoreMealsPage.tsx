@@ -5,14 +5,14 @@ import { orderSchema, type OrderData } from "@/schemas/order";
 import { Form } from "@/components/ui/form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
-import { useLoaderData, useNavigate } from "react-router-dom";
-import type { Meal } from "@/types/meal";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useEffect, useMemo } from "react";
 import { updateOrderItems } from "@/api/orders";
 import type { Order } from "@/types/order";
 import { Plus } from "lucide-react";
+import { useMealQuery } from "@/api/meals";
 
 export function OrderMoreMealsPage() {
     const navigate = useNavigate()
@@ -27,27 +27,31 @@ export function OrderMoreMealsPage() {
         throw new Error("Could not find your order")
     }
 
-    // Fill the disabled form fields
-    currentOrder.table_no = order.table_no
-    currentOrder.notes = order.notes
-
-
-    const meals: Meal[] = useLoaderData()
+    const { data, isLoading } = useMealQuery()
+    const meals = data ?? []
 
     const form = useForm<OrderData>({
         resolver: zodResolver(orderSchema),
-        defaultValues: currentOrder
+        defaultValues: {
+            ...currentOrder,
+            table_no: order.table_no,
+            notes: order.notes,
+        }
     })
     
     const items = form.getValues('items')
-    const price = useMemo(() => items.reduce((total, item) => {
-        const itemPrice = meals.find(meal => meal.id === item.meal_id)?.price
-        if (itemPrice == undefined) {
-            throw new Error("Undefined price")
+    const price = useMemo(() => {
+        if (meals.length === 0) {
+            return 0
         }
-
-        return total += item.quantity * itemPrice
-        }, 0), [items, meals])
+        return items.reduce((total, item) => {
+            const itemPrice = meals.find(meal => meal.id === item.meal_id)?.price
+            if (itemPrice == undefined) {
+                throw new Error("Undefined price")
+            }
+            return total += item.quantity * itemPrice
+        }, 0)
+    }, [items, meals])
 
     //Save to context
     useEffect(() => {
@@ -64,6 +68,10 @@ export function OrderMoreMealsPage() {
         // Reset order before saving
         form.setValue('items', [])
         navigate(`/order/${newOrder.id}`)
+    }
+
+    if (isLoading) {
+        return <div className="p-4">Loading...</div>
     }
 
     return (
@@ -108,7 +116,7 @@ export function OrderMoreMealsPage() {
                     name="items"
                     render={({ field }) =>
                         
-                        {console.log(field)
+                        {
                             return (
                     <FormItem>
                         <FormLabel>Meals</FormLabel>

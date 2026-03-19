@@ -26,7 +26,7 @@ export const useOrdersWithSSE = () => {
   const [isSSEConnected, setIsSSEConnected] = useState(false);
     console.log('useOrdersWithSSE');
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:5173/api/events/orders');
+    const eventSource = new EventSource('/api/events/orders');
     console.log('EventSource created');
     setIsSSEConnected(true);
 

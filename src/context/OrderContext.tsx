@@ -1,6 +1,6 @@
 import { createContext, useState } from "react"
 import type { CurrentOrder, CurrentOrderItem, Order, OrderItem } from "@/types/order"
-import { Outlet, useNavigate } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useEffect} from "react"
 import { useContext } from "react"
 
@@ -26,23 +26,18 @@ const defaultCurrentOrder: CurrentOrder = {
 const OrderContext = createContext<OrderContextType | undefined>(undefined)
 
 export function OrderContextProvider({children}: {children: React.ReactNode}) {
-    const [isLoading, setLoading] = useState(true)
     const [currentOrder, setCurrentOrder] = useState<CurrentOrder>(structuredClone(defaultCurrentOrder))
     const [order, setOrder] = useState<Order | null>(null)
-    const navigate = useNavigate()
 
 
     // Load order from local storage upon being loaded
     useEffect(() => {
-        setLoading(true)
         const stored = localStorage.getItem("order")
         console.log(stored)
         if (stored) {
           const parsed = JSON.parse(stored)
           setOrder(parsed)
-          navigate(`/order/${parsed.id}`)
         }
-        setLoading(false)
       }, [])
 
     const getOrder = () => order
@@ -73,22 +68,27 @@ export function OrderContextProvider({children}: {children: React.ReactNode}) {
     }
     
     const setQuantity = (mealID: number, quantity: number) => {
-        const exists = getCurrentOrderItems().find((item) => item.meal_id === mealID)
-        const currentOrder = getCurrentOrder()
-
-        if (exists) {
-            currentOrder.items = (getCurrentOrderItems().map(item => item.meal_id === mealID ? { ...item, quantity } : item))
-            return
-        }
-    
-        currentOrder.items = [...getCurrentOrderItems(), {meal_id: mealID, quantity: quantity}]
-        }
+        setCurrentOrder((prev) => {
+            const exists = prev.items.find((item) => item.meal_id === mealID)
+            if (exists) {
+                return {
+                    ...prev,
+                    items: prev.items.map(item => item.meal_id === mealID ? { ...item, quantity } : item)
+                }
+            }
+            return {
+                ...prev,
+                items: [...prev.items, {meal_id: mealID, quantity: quantity}]
+            }
+        })
+    }
     
 
     const deleteCurrentOrderItem = (mealID: number) => {
-        const currentOrder = getCurrentOrder()
-        currentOrder.items = getCurrentOrderItems().filter(item => item.meal_id != mealID)
-        
+        setCurrentOrder((prev) => ({
+            ...prev,
+            items: prev.items.filter(item => item.meal_id != mealID)
+        }))
     }
     const updateOrder = (order: Order) => {
         setOrder(order)
@@ -98,7 +98,7 @@ export function OrderContextProvider({children}: {children: React.ReactNode}) {
 
     return (
     <OrderContext.Provider value={{getOrder, getCurrentOrder, saveCurrentOrder, getOrderItems, getCurrentOrderItems, getCurrentOrderItem, setQuantity, deleteCurrentOrderItem, updateOrder}}>
-        {!isLoading && children}
+        {children}
     </OrderContext.Provider>
     )
 }
@@ -113,10 +113,23 @@ export const OrderContextRoute = () => {
     return (
       <OrderContextProvider>
         <div id="outlet-container">
-          <Outlet>
-
-          </Outlet>
+          <OrderContextGate />
         </div>
       </OrderContextProvider>
     )
   }
+
+const OrderContextGate = () => {
+    const { getOrder } = useOrderContext()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const order = getOrder()
+
+    useEffect(() => {
+        if (order && location.pathname === "/order") {
+            navigate(`/order/${order.id}`, { replace: true })
+        }
+    }, [order, location.pathname, navigate])
+
+    return <Outlet />
+}

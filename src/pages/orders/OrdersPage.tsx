@@ -2,7 +2,6 @@ import { usePaginatedOrders } from '@/api/orders';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Order } from '@/types/order';
 import { useMealQuery } from '@/api/meals';
-import { useLoaderData } from 'react-router-dom';
 import { getMealById, getTotalPrice } from '@/utils/orderutils';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import type { Meal } from '@/types/meal';
@@ -19,11 +18,15 @@ function getDateString(created_at: string): string {
 
 export function OrdersPage() {
     const PAGE_SIZE = 10
-    const meals: Meal[] = useLoaderData()
+    const { data: mealsData, isLoading: mealsLoading } = useMealQuery()
+    const meals: Meal[] = mealsData ?? []
 
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = usePaginatedOrders(PAGE_SIZE)
     const orders = data?.pages.flat(1) || []
-    const isLoading = !data && !isFetchingNextPage
+
+    if (mealsLoading || !mealsData) {
+        return <div className="p-4">Loading meals...</div>
+    }
 
     //Groups orders by the day they were created
     const groupedOrders = orders.reduce((acc: Order[][], order: Order) => {

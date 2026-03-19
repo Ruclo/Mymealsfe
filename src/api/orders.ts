@@ -1,35 +1,15 @@
 import { type Order } from "@/types/order";
 import type { OrderData } from "@/schemas/order";
 import { ReviewData } from "@/schemas/review";
-import { QueryClient, useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { mealQueryOptionsWithDeleted, mealsLoader } from "./meals";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { apiRequest } from "@/api/client";
 
 export async function createOrder(currentOrder: OrderData): Promise<Order> {
-    const res = await fetch('/api/orders', {
-        credentials: "include",
-        method: "POST",
-        body: JSON.stringify(currentOrder)
-    })
-
-    if (!res.ok) {
-        throw new Error(JSON.stringify(res.body))
-    }
-
-    return await res.json()
+    return await apiRequest<Order>('/api/orders', { method: "POST", json: currentOrder })
 }
 
 export async function updateOrderItems(orderId: number, currentOrder: OrderData): Promise<Order> {
-    const res = await fetch(`/api/orders/${orderId}/items`, {
-        credentials: "include",
-        method: "POST",
-        body: JSON.stringify(currentOrder.items)
-    })
-
-    if (!res.ok) {
-        throw new Error(JSON.stringify(res.body))
-    }
-
-    return await res.json()
+    return await apiRequest<Order>(`/api/orders/${orderId}/items`, { method: "POST", json: currentOrder.items })
 }
 
 export async function createReview(review: ReviewData): Promise<void> {
@@ -45,17 +25,7 @@ export async function createReview(review: ReviewData): Promise<void> {
     }
     }
 
-    const res = await fetch(`/api/orders/${review.order_id}/review`,
-        {
-            credentials: "include",
-            method: "POST",
-            body: formData
-        }
-    )
-
-    if (!res.ok) {
-        throw new Error(JSON.stringify(res.body))
-    }
+    await apiRequest<void>(`/api/orders/${review.order_id}/review`, { method: "POST", body: formData })
 }
 
 const INITIAL_OLDER_THAN = new Date(0)
@@ -66,14 +36,7 @@ const fetchOrders = async (olderThan: Date, pageSize: number): Promise<Order[]> 
         urlString += `&olderThan=${olderThan.toISOString()}`
     }
 
-    const res = await fetch(urlString, {
-        credentials: "include"
-    })
-
-    if (!res.ok) {
-        throw new Error(JSON.stringify(res.body))
-    }
-    return await res.json()
+    return await apiRequest<Order[]>(urlString)
 }
 
 export const usePaginatedOrders = (pageSize: number) => {
@@ -91,6 +54,3 @@ export const usePaginatedOrders = (pageSize: number) => {
     })
 }
 
-export const ordersLoader = (queryClient: QueryClient) => {
-    return async () => await queryClient.ensureQueryData(mealQueryOptionsWithDeleted)
-}

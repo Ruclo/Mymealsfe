@@ -11,7 +11,6 @@ import { LoginPage } from './pages/auth/LoginPage'
 import { AdminPage } from './pages/home/AdminPage'
 import { StaffPage } from './pages/home/StaffPage'
 import { ChangePasswordPage } from './pages/auth/ChangePasswordPage'
-import { mealByIdLoader, mealsLoader } from './api/meals'
 import { MealMenuPage } from './pages/meals/MealMenuPage'
 import { MealDetailPage } from './pages/meals/MealDetailPage'
 import { OrderContextRoute } from './context/OrderContext'
@@ -19,15 +18,15 @@ import { CreateOrderPage } from './pages/orders/CreateOrderPage'
 import { OrderFinishedPage } from './pages/orders/OrderFinishedPage'
 import { PostReviewPage } from './pages/orders/PostReviewPage'
 import { OrderMoreMealsPage } from './pages/orders/OrderMoreMealsPage'
-import { staffLoader } from './api/users'
 import { ManageEmployeesPage } from './pages/employees/ManageEmployeesPage'
 import { CreateEmployeePage } from './pages/employees/CreateEmployeePage'
 import { ManageMealsPage } from './pages/meals/ManageMealsPage'
 import { CreateMealPage } from './pages/meals/CreateMealPage'
 import { EditMealPage } from './pages/meals/EditMealPage'
 import { OrdersPage } from './pages/orders/OrdersPage'
-import { ordersLoader } from './api/orders'
 import { PendingOrdersPage } from './pages/orders/PendingOrdersPage'
+import { RequireRole } from './routes/RequireRole'
+import { UserRole } from './types/user'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,21 +57,18 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <CreateOrderPage />,
-            loader: mealsLoader(queryClient)
+            element: <CreateOrderPage />
           },
           {
             path: 'meals',
             children: [
               {
                 index: true,
-                element: <MealMenuPage />,
-                loader: mealsLoader(queryClient)
+                element: <MealMenuPage />
               },
               {
                 path: ':mealID',
-                element: <MealDetailPage />,
-                loader: mealByIdLoader(queryClient)
+                element: <MealDetailPage />
               },
             ]
           },
@@ -94,21 +90,18 @@ const router = createBrowserRouter([
                 children: [
                   {
                     index: true,
-                    element: <OrderMoreMealsPage />,
-                    loader: mealsLoader(queryClient)
+                    element: <OrderMoreMealsPage />
                   },
                   {
                     path: 'meals',
                     children: [
                       {
                         index: true,
-                        element: <MealMenuPage />,
-                        loader: mealsLoader(queryClient)
+                        element: <MealMenuPage />
                       },
                       {
                         path: ':mealID',
-                        element: <MealDetailPage />,
-                        loader: mealByIdLoader(queryClient)
+                        element: <MealDetailPage />
                       }
                     ]
                   }
@@ -121,6 +114,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'admin',
+        element: <RequireRole roles={[UserRole.Admin]} />,
         children: [
           {
             index: true,
@@ -135,8 +129,7 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <ManageEmployeesPage />,
-                loader: staffLoader(queryClient)
+                element: <ManageEmployeesPage />
               },
               {
                 path: 'create',
@@ -149,8 +142,7 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <ManageMealsPage />,
-                loader: mealsLoader(queryClient)
+                element: <ManageMealsPage />
               },
               {
                 path: 'create',
@@ -159,8 +151,7 @@ const router = createBrowserRouter([
               
               {
                 path: ':mealID/edit',
-                element: <EditMealPage />,
-                loader: mealByIdLoader(queryClient)
+                element: <EditMealPage />
               }
             ]
             
@@ -170,8 +161,7 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <OrdersPage />,
-                loader: ordersLoader(queryClient)
+                element: <OrdersPage />
               },
               {
                 path: "pending",
@@ -184,6 +174,7 @@ const router = createBrowserRouter([
       
       {
         path: 'staff',
+        element: <RequireRole roles={[UserRole.Admin, UserRole.RegularStaff]} />,
         children: [
           {
             index: true,

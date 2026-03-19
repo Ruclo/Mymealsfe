@@ -1,14 +1,24 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { QuantityStepper } from "@/components/quantity-stepper";
-import type { Meal } from "@/types/meal";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useOrderContext } from "@/context/OrderContext";
+import { useMealQuery } from "@/api/meals";
 
 export function MealDetailPage() {
     const navigate = useNavigate()
-    const meal: Meal = useLoaderData()
+    const { mealID } = useParams()
+    const { data, isLoading } = useMealQuery()
+    const meal = data?.find(item => item.id === Number(mealID))
     
+    if (isLoading) {
+        return <div className="p-4">Loading...</div>
+    }
+
+    if (!meal) {
+        return <div className="p-4">Meal not found</div>
+    }
+
     const { getCurrentOrderItem, setQuantity, deleteCurrentOrderItem } = useOrderContext()
     const currentOrderItem = getCurrentOrderItem(meal.id)
 

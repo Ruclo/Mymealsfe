@@ -5,8 +5,7 @@ import { orderSchema, type OrderData } from "@/schemas/order";
 import { Form } from "@/components/ui/form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
-import { useLoaderData, useNavigate } from "react-router-dom";
-import type { Meal } from "@/types/meal";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useEffect, useMemo } from "react";
@@ -14,13 +13,14 @@ import { createOrder } from "@/api/orders";
 import type { Order } from "@/types/order";
 import { Plus } from "lucide-react";
 import { getTotalPrice } from "@/utils/orderutils";
+import { useMealQuery } from "@/api/meals";
 
 export function CreateOrderPage() {
     const navigate = useNavigate()
     const { getCurrentOrder, saveCurrentOrder, updateOrder } = useOrderContext()
     const currentOrder = getCurrentOrder()
-
-    const meals: Meal[] = useLoaderData()
+    const { data, isLoading } = useMealQuery()
+    const meals = data ?? []
 
     const form = useForm<OrderData>({
         resolver: zodResolver(orderSchema),
@@ -30,7 +30,7 @@ export function CreateOrderPage() {
     const items = form.getValues('items')
 
     // Total price
-    const price = useMemo(() => getTotalPrice(items, meals), [items, meals])
+    const price = useMemo(() => meals.length ? getTotalPrice(items, meals) : 0, [items, meals])
 
     // Save current order to context when leaving this page
     useEffect(() => {
@@ -48,6 +48,10 @@ export function CreateOrderPage() {
         //resets current order items
         form.setValue('items', [])
         navigate(`/order/${order.id}`)
+    }
+
+    if (isLoading) {
+        return <div className="p-4">Loading...</div>
     }
 
     return (
@@ -92,7 +96,7 @@ export function CreateOrderPage() {
                     name="items"
                     render={({ field }) =>
                         
-                        {console.log(field)
+                        {
                             return (
                     <FormItem>
                         <FormLabel>Meals</FormLabel>

@@ -1,9 +1,16 @@
 import { MealList } from "@/components/MealList";
-import { Meal } from "@/types/meal";
-import { useLoaderData } from "react-router-dom";
+import { useMealQuery } from "@/api/meals";
 
 export function MealMenuPage() {
-    const meals: Meal[] = useLoaderData()
+    const { data, isLoading } = useMealQuery()
+
+    if (isLoading) {
+        return <div className="p-4">Loading...</div>
+    }
+
+    if (!data) {
+        return <div className="p-4">No meals found</div>
+    }
 
     return (
         <div className="h-100 w-screen">
@@ -11,7 +18,7 @@ export function MealMenuPage() {
                 Menu
             </header>
             <div className="flex flex-col items-center justify-center">
-                <MealList meals={meals} linkMutation={(id: number) => `${id}`}/>
+                <MealList meals={data} linkMutation={(id: number) => `${id}`}/>
             </div>
         </div>
     )

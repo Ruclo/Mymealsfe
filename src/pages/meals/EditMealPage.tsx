@@ -8,11 +8,15 @@ import { Meal, MealCategory } from "@/types/meal"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { ImageUpload } from "@/components/ImageUpload"
-import { useAddMeal, useDeleteMeal, useUpdateMeal } from "@/api/meals"
-import { useLoaderData, useNavigate } from "react-router-dom"
+import { useDeleteMeal, useUpdateMeal } from "@/api/meals"
+import { useNavigate, useParams } from "react-router-dom"
+import { useMealQuery } from "@/api/meals"
+import { useEffect } from "react"
 
 export function EditMealPage() {
-    const meal: Meal = useLoaderData()
+    const { mealID } = useParams()
+    const { data, isLoading } = useMealQuery()
+    const meal: Meal | undefined = data?.find(item => item.id === Number(mealID))
     const updateMeal = useUpdateMeal()
     const deleteMeal = useDeleteMeal()
 
@@ -21,13 +25,26 @@ export function EditMealPage() {
     const form = useForm<UpdateMealData>({
         resolver: zodResolver(updateMealSchema),
         defaultValues: {
+            id: 0,
+            name: "",
+            category: MealCategory.MainCourses,
+            description: "",
+            price: 0,
+        },
+    })
+
+    useEffect(() => {
+        if (!meal) {
+            return
+        }
+        form.reset({
             id: meal.id,
             name: meal.name,
             category: meal.category,
             description: meal.description,
             price: meal.price,
-        }
-    })
+        })
+    }, [meal, form])
 
     const onSubmit = async (data: UpdateMealData) => {
         await updateMeal.mutateAsync(data)
@@ -36,6 +53,9 @@ export function EditMealPage() {
 
     const onDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
+        if (!meal) {
+            return
+        }
         await deleteMeal.mutateAsync(meal.id)
         navigate(-1)
     }
@@ -47,6 +67,14 @@ export function EditMealPage() {
         }
     }
     
+    if (isLoading) {
+        return <div className="p-4">Loading...</div>
+    }
+
+    if (!meal) {
+        return <div className="p-4">Meal not found</div>
+    }
+
     return (
         <div className="w-1/3 my-10 ml-4 md:ml-12 lg:ml-24">
             <h2 className="text-xl text-center">
