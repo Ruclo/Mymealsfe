@@ -1,4 +1,4 @@
-import { createMealSchema, UpdateMealData, updateMealSchema, type CreateMealData } from "@/schemas/meal"
+import { UpdateMealData, updateMealSchema } from "@/schemas/meal"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
@@ -76,11 +76,13 @@ export function EditMealPage() {
     }
 
     return (
-        <div className="w-1/3 my-10 ml-4 md:ml-12 lg:ml-24">
-            <h2 className="text-xl text-center">
-                Edit meal
-            </h2>
-            <div className="my-5">
+        <div className="form-shell">
+            <div className="text-center">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Admin</div>
+                <h2 className="display-serif form-title">Edit meal</h2>
+                <p className="form-subtitle mt-2">Update details, price, or replace the image.</p>
+            </div>
+            <div className="form-card">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <div className="flex justify-between">
@@ -171,9 +173,9 @@ export function EditMealPage() {
                     </FormItem>
                     )}
                 />
-                <div className="flex justify-between">       
-                    <Button type="submit">Submit</Button>
-                    <Button onClick={onDelete}>Delete</Button>
+                <div className="flex justify-end gap-3">       
+                    <Button type="submit">Save changes</Button>
+                    <Button onClick={onDelete} variant="outline">Delete</Button>
                 </div>  
                 </form>
             </Form>

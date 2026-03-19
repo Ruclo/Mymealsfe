@@ -1,7 +1,7 @@
 import { useMealQuery } from "@/api/meals"
 import { OrderItem } from "@/types/order"
 import { Button } from "./ui/button"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { getMealById } from "@/utils/orderutils"
 
 type PendingOrderItemProps = {

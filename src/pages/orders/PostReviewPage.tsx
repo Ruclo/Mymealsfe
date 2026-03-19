@@ -58,12 +58,13 @@ export function PostReviewPage() {
     }
 
     return (
-      <div className="w-1/3 my-10 ml-4 md:ml-12 lg:ml-24">
-        <div>
-            <h2 className="text-2xl my-2">
-                Leave us a review!
-            </h2>
-        <div>
+      <div className="form-shell">
+        <div className="text-center">
+            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Feedback</div>
+            <h2 className="display-serif form-title">Leave a review</h2>
+            <p className="form-subtitle mt-2">Tell us how your meal was. Add photos if you like.</p>
+        </div>
+        <div className="form-card">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
@@ -145,15 +146,12 @@ export function PostReviewPage() {
                 </FormItem>
               )}
             />
-            <Button 
-              type="submit" 
-              className="w-full"
-            >
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit">Submit review</Button>
+            </div>
           </form>
         </Form>
         </div>
-        </div>
-        </div>
+      </div>
     )
 }

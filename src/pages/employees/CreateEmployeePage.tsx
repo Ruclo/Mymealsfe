@@ -22,9 +22,13 @@ export function CreateEmployeePage() {
     }
 
     return (
-        <div>
-            <h2 className="text-2xl">Add a staff member</h2>
-            <div>
+        <div className="form-shell">
+            <div className="text-center">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Admin</div>
+                <h2 className="display-serif form-title">Add a staff member</h2>
+                <p className="form-subtitle mt-2">Create staff credentials for the dashboard.</p>
+            </div>
+            <div className="form-card">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
@@ -53,7 +57,9 @@ export function CreateEmployeePage() {
                     </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <div className="flex justify-end">
+                    <Button type="submit">Create staff</Button>
+                </div>
                 </form>
             </Form>
             </div>

@@ -36,7 +36,13 @@ export function ChangePasswordPage() {
     }
 
     return (
-        <div className='w-screen flex h-screen items-center justify-center'>
+        <div className="form-shell">
+            <div className="text-center">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Account</div>
+                <h2 className="display-serif form-title">Change password</h2>
+                <p className="form-subtitle mt-2">Update your password for staff access.</p>
+            </div>
+            <div className="form-card">
             <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -65,10 +71,13 @@ export function ChangePasswordPage() {
                 </FormItem>
                 )}
             />
-            <Button type="submit">Change Password</Button>
+            <div className="flex justify-end">
+                <Button type="submit">Change Password</Button>
+            </div>
             </form>
         </Form>
-        {isError && <p className="text-red-500">Invalid password</p>}
+        {isError && <p className="mt-3 text-sm text-red-500">Invalid password</p>}
+    </div>
     </div>
     )
 }

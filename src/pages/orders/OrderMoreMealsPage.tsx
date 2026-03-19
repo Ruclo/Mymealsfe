@@ -49,8 +49,9 @@ export function OrderMoreMealsPage() {
             if (itemPrice == undefined) {
                 throw new Error("Undefined price")
             }
+
             return total += item.quantity * itemPrice
-        }, 0)
+            }, 0)
     }, [items, meals])
 
     //Save to context
@@ -75,12 +76,14 @@ export function OrderMoreMealsPage() {
     }
 
     return (
-        <div className="w-1/3 my-10 ml-4 md:ml-12 lg:ml-24">  
-            <h2 className="text-xl text-center">
-                Order more items
-            </h2>
+        <div className="form-shell">
+            <div className="text-center">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Table</div>
+                <h2 className="display-serif form-title">Order more items</h2>
+                <p className="form-subtitle mt-2">Add extra items to your existing order.</p>
+            </div>
 
-            <div className="my-5">
+            <div className="form-card">
                 <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
@@ -110,8 +113,7 @@ export function OrderMoreMealsPage() {
                     )}
                 />
 
-
-                    <FormField
+                <FormField
                     control={form.control}
                     name="items"
                     render={({ field }) =>
@@ -123,22 +125,22 @@ export function OrderMoreMealsPage() {
                         {order.items.map (item => {
                             const meal = meals.find(meal => meal.id === item.meal_id)
                             return (
-                            <div className="flex items-center justify-between">
-                            <img className="rounded-full aspect-square" src={meal?.image_url} width="100" />
+                            <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
+                            <img className="rounded-full aspect-square" src={meal?.image_url} width="80" />
                             <div className="">
                                 {item.quantity}x {meal?.name}
                             </div>
                             </div>
                             )})}
 
-                        <hr className="border-black"/>
+                        <hr className="border-border/60"/>
                         {field.value.map(item => {
                             const meal = meals.find(meal => meal.id === item.meal_id)
                             return (
                             <Link to={"meals/" + meal?.id} key={item.meal_id}>
 
-                            <div className="flex items-center justify-between">
-                                <img className="rounded-full aspect-square" src={meal?.image_url} width="100" />
+                            <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
+                                <img className="rounded-full aspect-square" src={meal?.image_url} width="80" />
                                 <div className="">
                                     {item.quantity}x {meal?.name}
                                 </div>
@@ -147,7 +149,7 @@ export function OrderMoreMealsPage() {
                     )})}
                     <div className="flex flex-col items-center">
 
-                        <Link to='meals'>
+                        <Link to='meals' className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white/70">
                             <Plus />
                         </Link>
                     </div>
@@ -155,12 +157,11 @@ export function OrderMoreMealsPage() {
                     </FormItem>
                     )}}
                 />
-                <div className="flex justify-between">
-                                            
-                    <Button type="submit">Submit</Button>
-                    <span>
-                        Price: {price}€
+                <div className="flex flex-wrap items-center justify-between gap-3">                           
+                    <span className="text-sm text-muted-foreground">
+                        Total: <span className="font-semibold text-foreground">{price}€</span>
                     </span>
+                    <Button type="submit">Update order</Button>
                 </div>  
                 </form>
             </Form>  

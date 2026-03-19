@@ -38,11 +38,13 @@ export function CreateMealPage() {
     }
     
     return (
-        <div className="w-1/3 my-10 ml-4 md:ml-12 lg:ml-24">
-            <h2 className="text-xl text-center">
-                Create a new meal
-            </h2>
-            <div className="my-5">
+        <div className="form-shell">
+            <div className="text-center">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Admin</div>
+                <h2 className="display-serif form-title">Create a new meal</h2>
+                <p className="form-subtitle mt-2">Add a new dish to the menu with image and details.</p>
+            </div>
+            <div className="form-card">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <div className="flex justify-between">
@@ -133,8 +135,8 @@ export function CreateMealPage() {
                     </FormItem>
                     )}
                 />
-                <div className="flex justify-between">       
-                    <Button type="submit">Submit</Button>
+                <div className="flex justify-end">       
+                    <Button type="submit">Create meal</Button>
                 </div>  
                 </form>
             </Form>

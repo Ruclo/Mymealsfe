@@ -49,12 +49,14 @@ export function OrdersPage() {
     }, [])
 
     return (
-        <div>
-            <header className="py-5 text-center font-bold text-xl">
-                Orders
+        <div className="px-4 py-8">
+            <header className="mb-8">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Admin</div>
+                <h1 className="display-serif text-3xl">Orders</h1>
+                <p className="mt-2 text-sm text-muted-foreground">Track daily volume, open each order to inspect items and reviews.</p>
             </header>
 
-            <div>
+            <div className="space-y-6">
                 <InfiniteScroll
                     dataLength={orders.length}
                     next={() =>
@@ -71,48 +73,49 @@ export function OrdersPage() {
                         </p>}
                     >
             {groupedOrders.map((orders) => (
-                    <div key={getDateString(orders[0].created_at)} className="border-b border-gray-200 p-4">
-                        <div>
+                    <div key={getDateString(orders[0].created_at)} className="rounded-2xl border border-border bg-white/70 p-4 shadow-sm">
+                        <div className="mb-3 flex items-center justify-between">
                             <h2 className="text-lg font-semibold">{getDateString(orders[0].created_at)}</h2>
+                            <div className="text-xs text-muted-foreground">{orders.length} orders</div>
                         </div>
                         <Accordion type="single" collapsible className="w-full">
                         {orders.map((order) => (
                             <AccordionItem key={order.id} value={order.id.toString()}>
                                 <AccordionTrigger>
-                                    <div className="py-2 flex gap-2">
-                                        <div>
-                                            Order ID: {order.id}
+                                    <div className="py-2 flex flex-wrap gap-3 text-sm">
+                                        <div className="rounded-full bg-black/5 px-3 py-1">
+                                            Order #{order.id}
                                         </div>
-                                        <div>
-                                            Total: {getTotalPrice(order.items, meals).toFixed(2)}€
+                                        <div className="rounded-full bg-black/5 px-3 py-1">
+                                            Total {getTotalPrice(order.items, meals).toFixed(2)}€
                                         </div>
-                                        <div>
+                                        <div className="rounded-full bg-black/5 px-3 py-1">
                                             {order.review ? `${order.review.rating}/5` : "No review"}
                                         </div>
                                     </div>
                                     </AccordionTrigger>
                                 <AccordionContent>
-                                    <div>
+                                    <div className="space-y-2">
                                         {order.items.map((item) => {
                                             const meal = getMealById(item.meal_id, meals)
                                             return (
-                                            <div key={item.meal_id} className="flex justify-between">
-                                                <div>
-                                                    {item.quantity}x{meal.name}
+                                            <div key={item.meal_id} className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
+                                                <div className="text-sm">
+                                                    {item.quantity}x {meal.name}
                                                 </div>
-                                                <div>
+                                                <div className="text-sm font-semibold">
                                                     {item.quantity * meal.price}€
                                                 </div>
                                             </div>)
                                         })}
                                     </div>
                                     {order.review && (<div>
-                                        <div>
+                                        <div className="mt-4 text-sm text-muted-foreground">
                                             {order.review.comment}
                                         </div>
-                                        <div>
+                                        <div className="mt-3 grid grid-cols-3 gap-2">
                                             {order.review.photo_urls.map((photo) => (
-                                                <img key={photo} src={photo} alt="review" className="w-1/3" />
+                                                <img key={photo} src={photo} alt="review" className="h-24 w-full rounded-lg object-cover" />
                                             ))}
                                         </div>
                                     </div>) }

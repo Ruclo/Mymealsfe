@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
@@ -43,24 +44,24 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.13 0.028 261.692);
+  --background: oklch(0.985 0.01 95);
+  --foreground: oklch(0.14 0.02 259);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.13 0.028 261.692);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0.028 261.692);
-  --primary: oklch(0.21 0.034 264.665);
-  --primary-foreground: oklch(0.985 0.002 247.839);
+  --primary: oklch(0.2 0.12 40);
+  --primary-foreground: oklch(0.98 0.01 95);
   --secondary: oklch(0.967 0.003 264.542);
   --secondary-foreground: oklch(0.21 0.034 264.665);
   --muted: oklch(0.967 0.003 264.542);
   --muted-foreground: oklch(0.551 0.027 264.364);
-  --accent: oklch(0.967 0.003 264.542);
-  --accent-foreground: oklch(0.21 0.034 264.665);
+  --accent: oklch(0.92 0.04 90);
+  --accent-foreground: oklch(0.2 0.12 40);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.928 0.006 264.531);
-  --input: oklch(0.928 0.006 264.531);
-  --ring: oklch(0.707 0.022 261.325);
+  --border: oklch(0.9 0.01 95);
+  --input: oklch(0.9 0.01 95);
+  --ring: oklch(0.64 0.08 45);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -116,5 +117,41 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    background-image:
+      radial-gradient(1000px 600px at 12% 8%, oklch(0.94 0.05 70) 0%, transparent 60%),
+      radial-gradient(900px 520px at 88% 18%, oklch(0.93 0.04 30) 0%, transparent 62%),
+      linear-gradient(180deg, oklch(0.985 0.01 95) 0%, oklch(0.98 0.01 95) 100%);
+    background-attachment: fixed;
   }
+}
+
+.display-serif {
+  font-family: "Instrument Serif", ui-serif, Georgia, serif;
+}
+
+.form-shell {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+}
+
+.form-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.form-subtitle {
+  font-size: 0.875rem;
+  color: color-mix(in oklab, var(--foreground) 60%, transparent);
+}
+
+.form-card {
+  margin-top: 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, white 70%, transparent);
+  padding: 1.75rem;
+  box-shadow: 0 16px 40px rgba(20, 16, 8, 0.1);
+  backdrop-filter: blur(10px);
 }

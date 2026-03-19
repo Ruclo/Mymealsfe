@@ -13,13 +13,13 @@ export function MealMenuPage() {
     }
 
     return (
-        <div className="h-100 w-screen">
-            <header className="py-5 text-center font-bold text-xl">
-                Menu
+        <div className="px-4 py-8">
+            <header className="mb-8 text-center">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Table Menu</div>
+                <h1 className="display-serif text-4xl">Today’s Menu</h1>
+                <p className="mt-2 text-sm text-muted-foreground">Browse by category and tap to add items.</p>
             </header>
-            <div className="flex flex-col items-center justify-center">
-                <MealList meals={data} linkMutation={(id: number) => `${id}`}/>
-            </div>
+            <MealList meals={data} linkMutation={(id: number) => `${id}`}/>
         </div>
     )
 }

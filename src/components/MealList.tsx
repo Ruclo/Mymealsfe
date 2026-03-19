@@ -21,28 +21,30 @@ export function MealList({meals, linkMutation}: MealListProps) {
   const groupedMeals = groupMealsByCategory(meals)
   const mealEntries = Array.from(groupedMeals.entries())
   return (
-    <div>
+    <div className="space-y-10">
         {mealEntries.map(([category, meals]) => (
-            <div key={category}>
-            <div className="text-center"><h1 className="font-bold">{category}</h1></div>
-            <ul>
-                {meals.map(meal => (
-                    <li key={meal.id} className="m-[0.5em]">   
-                    <Link to={linkMutation(meal.id)}>
-                        <div className="flex gap-2">
-                            <img className="w-[4em] h-[4em] rounded-full" width={100} src={meal.image_url} />
-                            <div className="flex items-center justify-center">
-                                {meal.name}
+            <section key={category} className="space-y-4">
+                <div className="flex items-center justify-between">
+                    <h2 className="display-serif text-2xl">{category}</h2>
+                    <div className="h-px flex-1 bg-border/60 ml-4" />
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {meals.map(meal => (
+                        <Link to={linkMutation(meal.id)} key={meal.id} className="group">
+                            <div className="rounded-2xl border border-border bg-white/70 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+                                <div className="flex items-center gap-4">
+                                    <img className="h-14 w-14 rounded-full object-cover ring-2 ring-white" src={meal.image_url} />
+                                    <div className="flex-1">
+                                        <div className="font-semibold">{meal.name}</div>
+                                        <div className="text-xs text-muted-foreground">{meal.description}</div>
+                                    </div>
+                                    <div className="text-sm font-semibold text-foreground/80">{meal.price}€</div>
+                                </div>
                             </div>
-                            <div className="flex items-center justify-center">
-                                {meal.price + '€'}
-                            </div>
-                        </div>
-                    </Link>
-                    </li>
-                ))}
-            </ul>
-            </div>
+                        </Link>
+                    ))}
+                </div>
+            </section>
         ))}
     </div>
   )
