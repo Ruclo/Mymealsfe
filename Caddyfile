@@ -1,15 +1,14 @@
 {$CADDY_HOST:chat.local} {
-  tls internal
+	tls internal
+	root * /srv
+	encode gzip
 
-  root * /srv
-  encode gzip
+	handle /api/* {
+		reverse_proxy backend:8080
+	}
 
-  handle /api/* {
-    reverse_proxy backend:8080
-  }
-
-  handle {
-    try_files {path} /index.html
-    file_server
-  }
+	handle {
+		try_files {path} /index.html
+		file_server
+	}
 }
