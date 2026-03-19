@@ -35,39 +35,30 @@ export function MealDetailPage() {
     }
 
     return (
-        <div className="max-w-1/3 my-10 ml-4 md:ml-12 lg:ml-24">
-            <h2 className="text-2xl my-2">
-                {meal.name}
-            </h2>
-            <div className="flex my-2">
-                <img src={meal.image_url} className="aspect-1/1" width="200" />
-                <div className="mx-2">
-                    <div>
-                        {meal.category}
+        <div className="form-shell">
+            <div className="form-card">
+                <div className="flex flex-col gap-6 md:flex-row md:items-center">
+                    <div className="flex-1">
+                        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">{meal.category}</div>
+                        <h2 className="display-serif text-3xl mt-2">{meal.name}</h2>
+                        <p className="mt-3 text-sm text-muted-foreground">{meal.description}</p>
+                        <div className="mt-4 text-lg font-semibold">{meal.price}€</div>
                     </div>
-                    <div>
-                        Price: {meal.price}€
+                    <div className="flex items-center justify-center">
+                        <img src={meal.image_url} className="h-40 w-40 rounded-3xl object-cover shadow-md" />
                     </div>
                 </div>
-            </div>
-            <div className="my-2">
-                {meal.description}
-            </div>
-            <div className="flex justify-between my-2 items-center">
-                <span>
-                    Quantity:
-                </span>
-                <span>
-                    <QuantityStepper quantity={quantity} onChange={setQuantityState}/>
-                </span>
-            </div>
-            <div className="flex justify-between">
-                <Button onClick={onAdd}>
-                    Add
-                </Button>
-                <Button onClick={onRemove}>
-                    Remove
-                </Button>
+
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <span className="text-sm text-muted-foreground">Quantity</span>
+                        <QuantityStepper quantity={quantity} onChange={setQuantityState}/>
+                    </div>
+                    <div className="flex gap-3">
+                        <Button onClick={onAdd}>Add</Button>
+                        <Button onClick={onRemove} variant="outline">Remove</Button>
+                    </div>
+                </div>
             </div>
         </div>
     )

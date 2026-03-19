@@ -17,12 +17,12 @@ export function PendingOrder({ order, markDone }: PendingOrderProps) {
     const filteredItems = order.items.filter(item => item.completed < item.quantity)
 
     return (
-        <div className="pending-order w-1/3">
-            <div className="flex justify-between">
-                <div>Order ID: {order.id}</div>
-                <div>Table n.: {order.table_no}</div>
+        <div className="rounded-2xl border border-border bg-white/70 p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+                <div className="text-sm font-semibold">Order #{order.id}</div>
+                <div className="rounded-full bg-black/5 px-3 py-1 text-xs">Table {order.table_no}</div>
             </div>
-            <div className="flex">
+            <div className="mt-4 space-y-2">
                 {filteredItems.map((item) => (
                     <PendingOrderItem key={item.meal_id} item={item} onMarkDone={handleMarkDone}/>
                 ))}

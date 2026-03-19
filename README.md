@@ -1,54 +1,34 @@
-# React + TypeScript + Vite
+# MyMeals Frontend
+React + Vite frontend for the MyMeals restaurant dashboard.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Overview**
+- Uses a relative `/api` base path for backend requests.
+- In local dev, Vite proxies `/api` to `http://localhost:8080`.
+- In Docker Compose, Caddy serves the built app and reverse-proxies `/api` to the backend.
 
-Currently, two official plugins are available:
+**Requirements**
+- Node.js 20+
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+**Run (Local)**
+1. From `Mymealsfe`, install deps:
+```bash
+npm ci
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Start the dev server:
+```bash
+npm run dev
 ```
+3. Open the app from the Vite output (default `http://localhost:5173`).
+4. Ensure the backend is running on `http://localhost:8080`.
+
+**Run (Docker Compose)**
+1. From the repo root, run:
+```bash
+docker compose up --build
+```
+2. The frontend is served by Caddy. By default it uses the host `chat.local`.
+3. Add a hosts entry for `chat.local` or update `Mymealsfe/Caddyfile` to use `localhost`.
+
+**Related**
+- Root project: `../README.md`
+- Backend: `../MyMeals/README.md`

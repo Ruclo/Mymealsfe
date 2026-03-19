@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom';
-import { NavigationMenuList, NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu"
+import { Link, useNavigate } from 'react-router-dom';
 import { LinkLabel } from '@/types/link';
+import { useAuth } from '@/api/auth';
 
 export function StaffPage() {
+    const navigate = useNavigate()
+    const { logout } = useAuth()
     const links: LinkLabel[] = [
         {to: 'orders/pending', label: 'View Pending Orders'},
         {to: 'change-password', label: 'Change Password'},
@@ -10,20 +12,31 @@ export function StaffPage() {
     ]
 
     return (
-        <div className="flex flex-col border-gray-300 items-center h-screen justify-center text-center font-bold">
-        <NavigationMenu>
-        <NavigationMenuList>
-        <NavigationMenuItem >
-          {links.map((link) => (
+        <div className="px-4 py-8">
+            <header className="mb-8 flex items-center justify-between">
+                <div>
+                    <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Staff</div>
+                    <h1 className="display-serif text-3xl">Dashboard</h1>
+                </div>
+                <button
+                    className="rounded-full border border-border bg-white/70 px-4 py-2 text-sm font-semibold transition hover:bg-white"
+                    onClick={async () => {
+                        await logout()
+                        navigate("/")
+                    }}
+                >
+                    Log out
+                </button>
+            </header>
 
-              <NavigationMenuLink key={link.to} asChild>
-                <Link to={link.to}>{link.label}</Link>
-              </NavigationMenuLink>
-            
-          ))}
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
-    </div>
+            <div className="grid gap-4 md:grid-cols-2">
+                {links.filter(link => link.to !== "logout").map((link) => (
+                    <Link to={link.to} key={link.to} className="rounded-2xl border border-border bg-white/70 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+                        <div className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Staff</div>
+                        <div className="mt-2 text-lg font-semibold">{link.label}</div>
+                    </Link>
+                ))}
+            </div>
+        </div>
     )
 }

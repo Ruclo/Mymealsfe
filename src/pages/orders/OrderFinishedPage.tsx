@@ -13,17 +13,18 @@ export function OrderFinishedPage() {
     
     const existsReview = useMemo( () => order.review != null, [order.review])
     return (
-        <div className="flex flex-col justify-center items-center h-screen">
-            <div className="text-center">
-                <h2 className="text-2xl">
-                    Thank you for your order.
+        <div className="form-shell">
+            <div className="form-card text-center">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Order placed</div>
+                <h2 className="display-serif text-3xl mt-2">
+                    Thank you.
                 </h2>
-                <div>
-                    Your order with ID {order.id} is in making.
-                </div>
-                <div className="flex justify-between w-1/1">
-                    {!existsReview && <Link to='review'> Add review</Link>}
-                    <Link to='order-more'>Order more items</Link>
+                <p className="mt-3 text-sm text-muted-foreground">
+                    Your order #{order.id} is now in progress.
+                </p>
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                    {!existsReview && <Link to='review' className="rounded-full border border-border bg-white/70 px-4 py-2 text-sm font-semibold transition hover:bg-white">Add review</Link>}
+                    <Link to='order-more' className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-orange-500/20 transition hover:-translate-y-0.5">Order more items</Link>
                 </div>
             </div>        
         </div>

@@ -21,13 +21,13 @@ export function PendingOrderItem({item, onMarkDone}: PendingOrderItemProps) {
     }
 
     return (
-        data && <div className="pending-order-item flex items-center justify-between">
-            <div>
-                <span>{item.quantity}x{getMealById(item.meal_id, data).name}</span>
-                {item.completed > 0 && <span>+{difference}</span>}
+        data && <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
+            <div className="text-sm">
+                <span className="font-semibold">{item.quantity}x</span> {getMealById(item.meal_id, data).name}
+                {item.completed > 0 && <span className="ml-2 text-xs text-muted-foreground">+{difference} pending</span>}
             </div>
             <div>
-                <Button onClick={handleMarkDone}>Mark as done</Button>
+                <Button onClick={handleMarkDone} className="h-8 rounded-full px-3 text-xs">Mark as done</Button>
             </div>
         </div>
     )

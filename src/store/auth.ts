@@ -5,7 +5,7 @@ import type { User } from "@/types/user";
 
 type AuthStore = {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({

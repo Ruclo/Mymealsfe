@@ -44,9 +44,15 @@ export const useAuth = () => {
         }
     }
 
+    const logout = async () => {
+        await apiRequest<void>('/api/logout', { method: 'POST' })
+        setUser(null)
+    }
+
   return {
     login,
     getUser,
-    changePassword
+    changePassword,
+    logout
   };
 };
