@@ -1,4 +1,4 @@
-chat.local {
+{$CADDY_HOST:chat.local} {
   tls internal
 
   root * /srv

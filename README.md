@@ -28,7 +28,8 @@ npm run dev
 docker compose up --build
 ```
 2. The frontend is served by Caddy. By default it uses the host `chat.local`.
-3. Add a hosts entry for `chat.local` or update `Mymealsfe/Caddyfile` to use `localhost`.
+3. To expose it publicly, set `CADDY_HOST` to your domain (e.g. `CADDY_HOST=example.com`) and point DNS at your server.
+4. For local use, add a hosts entry for `chat.local` or set `CADDY_HOST=localhost`.
 
 **Related**
 - Root project: `https://github.com/Ruclo/mymealsdashboard`
